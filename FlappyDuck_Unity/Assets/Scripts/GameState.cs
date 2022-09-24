@@ -40,6 +40,12 @@ public class GameState : MonoBehaviour
     //The race track we're either creating or following
     public Racetrack _raceTrack;
 
+    //the duck which moves along the race track
+    public GameObject _duckActor;
+
+    //This is the camera/phone being used by the user
+    public GameObject _ARCamera;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -97,7 +103,8 @@ public class GameState : MonoBehaviour
 
             //todo: find the first transform in the race track and measure the camera distance to that start point.
             //when the distance is within 5 meters, we can switch over to the "race start" mode.
-
+            Vector3 camPos = _ARCamera.transform.position;
+            Vector3 startPos = _raceTrack.GetStartLocation();
 
             if(PlayerDistance <= 5.0)
             {
@@ -110,6 +117,7 @@ public class GameState : MonoBehaviour
             //for now, we have a single player so we just immediately move to the count down
             _gameMode = GameMode.RaceCountdown;
             CountDown = 3;
+            
         }
 
         if(_gameMode == GameMode.RaceCountdown)

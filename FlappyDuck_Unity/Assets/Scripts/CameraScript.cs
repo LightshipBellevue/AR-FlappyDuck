@@ -28,7 +28,7 @@ public class CameraScript : MonoBehaviour
             if (Physics.Raycast(ray, out hit))
             {
                 Transform objectHit = hit.transform;
-                track.PointList.Add(objectHit);
+                track.PointList.Add(objectHit.position);
             }
 
             //todo: When the user taps the screen, we stop recording
