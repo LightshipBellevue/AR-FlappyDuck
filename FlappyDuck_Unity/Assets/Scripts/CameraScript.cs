@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-
 public class CameraScript : MonoBehaviour
 {
     public Camera camera;
@@ -19,10 +18,17 @@ public class CameraScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(_gameState._gameMode == RecordingTrack)
+        if(_gameState._gameMode == GameMode.RecordingTrack)
         {
             RaycastHit hit;
-            Ray ray = Camera.ScreenPointToRay(0.5, 0.5);
+            Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+
+            if (Physics.Raycast(ray, out hit))
+            {
+                Transform objectHit = hit.transform;
+
+                // Do something with the object that was hit by the raycast.
+            }
         }
     }
 }
