@@ -11,7 +11,7 @@ We also keep track of the VPS anchor tracking state and location.
 
 public enum GameMode
 {
-    None,
+    MainMenu,
     FindingVPSAnchor,       //the user is finding a VPS anchor location
     RecordingTrack,         //the user is recording track transforms every frame
     RecordingStopped,       //The user stopped the recording and we're saving the data to a json file
@@ -26,6 +26,15 @@ public enum GameMode
 public class GameState : MonoBehaviour
 {
     public GameMode _gameMode;
+
+    //The race count down timer in seconds
+    public float CountDown = 5;
+
+    //The amount of time the player has been racing
+    public float RaceTime = 0;
+
+    //The race track we're either creating or following
+    public GameObject _raceTrack;
 
     // Start is called before the first frame update
     void Start()
