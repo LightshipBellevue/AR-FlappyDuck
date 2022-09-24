@@ -8,4 +8,4 @@ A rubber duck race based in Bellevue Downtown Park using Niantic's Lightship
 
 ![Overview Of Park](Concept%20Images/Park%20From%20Ascend.png)
 ## Team 
-[Meet the Team!](AR-FlappyDuck/../FlappyDuck_Unity/Assets/Readme.asset.metaTEAM.md)
+[Meet the Team!](TEAM.md)
