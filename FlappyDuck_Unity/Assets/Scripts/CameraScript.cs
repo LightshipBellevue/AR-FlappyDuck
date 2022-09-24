@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class CameraScript : MonoBehaviour
 {
-    public Camera camera;
+    public Camera _camera;
     public GameState _gameState;
     public Racetrack track;
 
@@ -21,14 +21,25 @@ public class CameraScript : MonoBehaviour
         if(_gameState._gameMode == GameMode.RecordingTrack)
         {
             RaycastHit hit;
-            Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+
+            //todo: grab the center of the screen instead of the mouse position
+            Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
 
             if (Physics.Raycast(ray, out hit))
             {
                 Transform objectHit = hit.transform;
-
-                // Do something with the object that was hit by the raycast.
+                track.PointList.Add(objectHit);
             }
+
+            //todo: When the user taps the screen, we stop recording
+
+            
+        }
+
+        if(_gameState._gameMode == GameMode.RecordingStopped)
+        {
+            track.Save();
+            _gameState._gameMode = GameMode.MainMenu;
         }
     }
 }

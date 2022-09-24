@@ -27,6 +27,8 @@ public class GameState : MonoBehaviour
 {
     public GameMode _gameMode;
 
+    public GameMode _desiredMode;       //The user will always start by finding a VPS anchor, but after the anchor has been located, we switch to this mode
+
     //The race count down timer in seconds
     public float CountDown = 5;
 
@@ -34,7 +36,7 @@ public class GameState : MonoBehaviour
     public float RaceTime = 0;
 
     //The race track we're either creating or following
-    public GameObject _raceTrack;
+    public Racetrack _raceTrack;
 
     // Start is called before the first frame update
     void Start()
@@ -42,9 +44,47 @@ public class GameState : MonoBehaviour
         
     }
 
+    public void StartNewGame()
+    {
+        _gameMode = GameMode.FindingVPSAnchor;
+        _desiredMode = GameMode.LoadingTrack;
+
+        //check to make sure that we actually loaded a track successfully
+        if (_raceTrack.Load())
+        {
+            _gameMode = GameMode.MovingToStart;
+        }
+        else
+        {
+            //todo: show error that no racetracks exist
+        }
+    }
+
+    public void StartNewRecording()
+    {
+
+    }
+
     // Update is called once per frame
     void Update()
     {
-        
+        if(_gameMode == GameMode.FindingVPSAnchor)
+        {
+            //todo: figure out when we've localized to a VPS anchor
+
+            bool VPSFound = false;
+
+            if (VPSFound)
+            {
+                //We are either starting a new game or starting a racetrack recording session.
+                if(_desiredMode == GameMode.LoadingTrack)
+                {
+                    _desiredMode = GameMode.MovingToStart;
+                }
+
+                //after the VPS anchor has been found, we set the game mode to the desired mode
+                _gameMode = _desiredMode;
+            }
+        }
     }
 }
