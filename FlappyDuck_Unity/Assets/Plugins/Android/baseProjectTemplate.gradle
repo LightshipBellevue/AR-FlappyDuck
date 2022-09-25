@@ -1,0 +1,26 @@
+allprojects {
+    buildscript {
+        repositories {**ARTIFACTORYREPOSITORY**
+            google()
+            jcenter()
+        }
+
+        dependencies {
+        
+            classpath 'com.android.tools.build:gradle:4.2.0'
+           
+        }
+    }
+
+    repositories {**ARTIFACTORYREPOSITORY**
+        google()
+        jcenter()
+        flatDir {
+            dirs "${project(':unityLibrary').projectDir}/libs"
+        }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
