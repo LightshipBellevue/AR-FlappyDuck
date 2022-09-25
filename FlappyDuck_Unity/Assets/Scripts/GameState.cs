@@ -2,6 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using Niantic.ARDK;
+using Niantic.ARDK.AR;
+using Niantic.ARDK.AR.ARSessionEventArgs;
+using Niantic.ARDK.AR.HitTest;
+using Niantic.ARDK.AR.WayspotAnchors;
+using Niantic.ARDK.Extensions;
+using Niantic.ARDK.LocationService;
+using Niantic.ARDK.Utilities;
 using Niantic.ARDK.Utilities.Input.Legacy;
 
 /*
@@ -46,11 +54,76 @@ public class GameState : MonoBehaviour
     //This is the camera/phone being used by the user
     public GameObject _ARCamera;
 
+    // Objects to access Niantic services
+    private IARSession _arSession;
+    public WayspotAnchorService WayspotAnchorService;
+    private IWayspotAnchorsConfiguration _config;
+
     // Start is called before the first frame update
     void Start()
     {
         StartNewGame();
     }
+
+    void Awake()
+    {
+        ARSessionFactory.SessionInitialized += HandleSessionInitialized;
+    }
+
+    private void OnDestroy()
+    {
+      if (WayspotAnchorService != null)
+      {
+        // WayspotAnchorService.LocalizationStateUpdated -= LocalizationStateUpdated;
+        WayspotAnchorService.Dispose();
+      }
+    }
+//////////////////
+// Start of section to integrate Niantic */
+//////////////////
+
+    // Listen for AR session creation...
+    private void HandleSessionInitialized(AnyARSessionInitializedArgs args)
+    { 
+      // Debug.Log("Rajeev says: ARSession initialized");
+      _arSession = args.Session;
+      _arSession.Ran += HandleSessionRan;
+    }
+
+    // Listen for AR session running...
+    private void HandleSessionRan(ARSessionRanArgs args)
+    {
+      // Debug.Log("Rajeev says: ARSession ran");
+      _arSession.Ran -= HandleSessionRan;
+      WayspotAnchorService = CreateWayspotAnchorService();
+      // WayspotAnchorService.LocalizationStateUpdated += OnLocalizationStateUpdated;
+    }
+
+    private WayspotAnchorService CreateWayspotAnchorService()
+    {
+      var locationService = LocationServiceFactory.Create(_arSession.RuntimeEnvironment);
+      locationService.Start();
+
+      if (_config == null)
+        _config = WayspotAnchorsConfigurationFactory.Create();
+
+      var wayspotAnchorService =
+        new WayspotAnchorService
+        (
+          _arSession,
+          locationService,
+          _config
+        );
+
+      // wayspotAnchorService.LocalizationStateUpdated += LocalizationStateUpdated;
+
+      return wayspotAnchorService;
+    }
+
+//////////////////
+// End of section integrating Niantic
+//////////////////
+
 
     public void StartNewGame()
     {
@@ -79,10 +152,8 @@ public class GameState : MonoBehaviour
     {
         if(_gameMode == GameMode.FindingVPSAnchor)
         {
-            bool VPSAnchorFound = false;
-            //todo: figure out when we've localized to a VPS anchor
-
-            if (VPSAnchorFound)
+            //todo: test if we've localized to a VPS anchor
+            if (WayspotAnchorService != null && WayspotAnchorService.LocalizationState == LocalizationState.Localized)
             {
                 //We are either starting a new game or starting a racetrack recording session.
                 if(_desiredMode == GameMode.LoadingTrack)
