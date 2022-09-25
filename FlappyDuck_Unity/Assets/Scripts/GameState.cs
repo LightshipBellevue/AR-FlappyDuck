@@ -39,9 +39,6 @@ public class GameState : MonoBehaviour
 
     public GameMode _desiredMode;       //The user will always start by finding a VPS anchor, but after the anchor has been located, we switch to this mode
 
-    // Object to access the Niantic services
-    private IARSession _arSession;
-
     //The race count down timer in seconds
     public float CountDown = 3;
 
@@ -56,6 +53,11 @@ public class GameState : MonoBehaviour
 
     //This is the camera/phone being used by the user
     public GameObject _ARCamera;
+
+    // Objects to access Niantic services
+    private IARSession _arSession;
+    public WayspotAnchorService WayspotAnchorService;
+    private IWayspotAnchorsConfiguration _config;
 
     // Start is called before the first frame update
     void Start()
@@ -83,8 +85,29 @@ public class GameState : MonoBehaviour
       Debug.Log("Rajeev says: ARSession ran");
 
       _arSession.Ran -= HandleSessionRan;
-      // WayspotAnchorService = CreateWayspotAnchorService();
+      WayspotAnchorService = CreateWayspotAnchorService();
       // WayspotAnchorService.LocalizationStateUpdated += OnLocalizationStateUpdated;
+    }
+
+    private WayspotAnchorService CreateWayspotAnchorService()
+    {
+      var locationService = LocationServiceFactory.Create(_arSession.RuntimeEnvironment);
+      locationService.Start();
+
+      if (_config == null)
+        _config = WayspotAnchorsConfigurationFactory.Create();
+
+      var wayspotAnchorService =
+        new WayspotAnchorService
+        (
+          _arSession,
+          locationService,
+          _config
+        );
+
+      // wayspotAnchorService.LocalizationStateUpdated += LocalizationStateUpdated;
+
+      return wayspotAnchorService;
     }
 
     public void StartNewGame()
