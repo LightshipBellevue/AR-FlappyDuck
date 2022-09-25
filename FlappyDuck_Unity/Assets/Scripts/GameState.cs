@@ -49,7 +49,7 @@ public class GameState : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        StartNewGame();
     }
 
     public void StartNewGame()
@@ -105,11 +105,16 @@ public class GameState : MonoBehaviour
             //when the distance is within 5 meters, we can switch over to the "race start" mode.
             Vector3 camPos = _ARCamera.transform.position;
             Vector3 startPos = _raceTrack.GetStartLocation();
+            Vector3 diff = camPos - startPos;
+            PlayerDistance = diff.magnitude;
 
             if(PlayerDistance <= 5.0)
             {
                 _gameMode = GameMode.WaitingToRace;
             }
+
+            //place the duck at the race starting position
+            _duckActor.transform.position = startPos;
         }
 
         if(_gameMode == GameMode.WaitingToRace)
@@ -135,11 +140,14 @@ public class GameState : MonoBehaviour
         if(_gameMode == GameMode.Racing)
         {
             RaceTime += Time.deltaTime;
-            float DistanceFromFinish = 100;
-            //todo: find the distance from the current position on the track and look at the distance from the last position on the track.
-            //when the distance from the finish line is nearly 0, then we "finish" the race.
 
-            if(DistanceFromFinish <= 0)
+            //need to move the duck along the race track
+            _raceTrack.UpdateDuck();
+            _duckActor.transform.position = _raceTrack.GetPositionAtDistance();
+
+            //find the distance from the current position on the track and look at the distance from the last position on the track.
+            //when the distance from the finish line is nearly 0, then we "finish" the race.
+            if (_raceTrack.DistanceLeft() <= 0)
             {
                 _gameMode = GameMode.RaceFinished;
             }
