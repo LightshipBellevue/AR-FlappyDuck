@@ -2,6 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using Niantic.ARDK;
+using Niantic.ARDK.AR;
+using Niantic.ARDK.AR.ARSessionEventArgs;
+using Niantic.ARDK.AR.HitTest;
+using Niantic.ARDK.AR.WayspotAnchors;
+using Niantic.ARDK.Extensions;
+using Niantic.ARDK.LocationService;
+using Niantic.ARDK.Utilities;
 using Niantic.ARDK.Utilities.Input.Legacy;
 
 /*
@@ -31,6 +39,9 @@ public class GameState : MonoBehaviour
 
     public GameMode _desiredMode;       //The user will always start by finding a VPS anchor, but after the anchor has been located, we switch to this mode
 
+    // Object to access the Niantic services
+    private IARSession _arSession;
+
     //The race count down timer in seconds
     public float CountDown = 3;
 
@@ -49,7 +60,31 @@ public class GameState : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
+    }
+
+    void Awake()
+    {
+        ARSessionFactory.SessionInitialized += HandleSessionInitialized;
+    }
+
+    // Listen for AR session creation...
+    private void HandleSessionInitialized(AnyARSessionInitializedArgs args)
+    { 
+      Debug.Log("Rajeev says: ARSession initialized");
+
+      _arSession = args.Session;
+      _arSession.Ran += HandleSessionRan;
+    }
+
+    // Listen for AR session running...
+    private void HandleSessionRan(ARSessionRanArgs args)
+    {
+      Debug.Log("Rajeev says: ARSession ran");
+
+      _arSession.Ran -= HandleSessionRan;
+      // WayspotAnchorService = CreateWayspotAnchorService();
+      // WayspotAnchorService.LocalizationStateUpdated += OnLocalizationStateUpdated;
     }
 
     public void StartNewGame()
