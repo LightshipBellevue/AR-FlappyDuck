@@ -70,11 +70,22 @@ public class GameState : MonoBehaviour
         ARSessionFactory.SessionInitialized += HandleSessionInitialized;
     }
 
+    private void OnDestroy()
+    {
+      if (WayspotAnchorService != null)
+      {
+        // WayspotAnchorService.LocalizationStateUpdated -= LocalizationStateUpdated;
+        WayspotAnchorService.Dispose();
+      }
+    }
+//////////////////
+// Start of section to integrate Niantic */
+//////////////////
+
     // Listen for AR session creation...
     private void HandleSessionInitialized(AnyARSessionInitializedArgs args)
     { 
-      Debug.Log("Rajeev says: ARSession initialized");
-
+      // Debug.Log("Rajeev says: ARSession initialized");
       _arSession = args.Session;
       _arSession.Ran += HandleSessionRan;
     }
@@ -82,8 +93,7 @@ public class GameState : MonoBehaviour
     // Listen for AR session running...
     private void HandleSessionRan(ARSessionRanArgs args)
     {
-      Debug.Log("Rajeev says: ARSession ran");
-
+      // Debug.Log("Rajeev says: ARSession ran");
       _arSession.Ran -= HandleSessionRan;
       WayspotAnchorService = CreateWayspotAnchorService();
       // WayspotAnchorService.LocalizationStateUpdated += OnLocalizationStateUpdated;
@@ -109,6 +119,11 @@ public class GameState : MonoBehaviour
 
       return wayspotAnchorService;
     }
+
+//////////////////
+// End of section integrating Niantic
+//////////////////
+
 
     public void StartNewGame()
     {
@@ -137,10 +152,8 @@ public class GameState : MonoBehaviour
     {
         if(_gameMode == GameMode.FindingVPSAnchor)
         {
-            bool VPSAnchorFound = false;
-            //todo: figure out when we've localized to a VPS anchor
-
-            if (VPSAnchorFound)
+            //todo: test if we've localized to a VPS anchor
+            if (WayspotAnchorService != null && WayspotAnchorService.LocalizationState == LocalizationState.Localized)
             {
                 //We are either starting a new game or starting a racetrack recording session.
                 if(_desiredMode == GameMode.LoadingTrack)
