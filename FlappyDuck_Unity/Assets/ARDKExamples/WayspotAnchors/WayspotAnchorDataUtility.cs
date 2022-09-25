@@ -42,6 +42,14 @@ namespace Niantic.ARDKExamples.WayspotAnchors
         return Array.Empty<WayspotAnchorPayload>();
       }
     }
+    
+    public static WayspotAnchorPayload[] LoadLocalSpecificPayload(string payloadString)
+    { 
+        var payloads = new List<WayspotAnchorPayload>();
+        var spef = WayspotAnchorPayload.Deserialize(payloadString);
+        payloads.Add(spef);
+        return payloads.ToArray();
+    }
 
     public static void ClearLocalPayloads()
     {

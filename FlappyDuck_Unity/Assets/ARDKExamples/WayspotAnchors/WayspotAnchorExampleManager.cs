@@ -23,6 +23,10 @@ namespace Niantic.ARDKExamples.WayspotAnchors
     [Tooltip("The anchor that will be placed")]
     [SerializeField]
     private GameObject _anchorPrefab;
+    
+    [Tooltip("The anchor that will be placed")]
+    [SerializeField]
+    private GameObject _pathingRouting;
 
     [Tooltip("Camera used to place the anchors via raycasting")]
     [SerializeField]
@@ -35,6 +39,9 @@ namespace Niantic.ARDKExamples.WayspotAnchors
     [Tooltip("Text used to show the current localization state")]
     [SerializeField]
     private Text _localizationStatus;
+
+    [SerializeField, TextArea] 
+    private string _WayspotAnchorPayload;
 
     public WayspotAnchorService WayspotAnchorService;
     private IARSession _arSession;
@@ -125,6 +132,28 @@ namespace Niantic.ARDKExamples.WayspotAnchors
     public void LoadWayspotAnchors()
     {
       var payloads = WayspotAnchorDataUtility.LoadLocalPayloads();
+      if (payloads.Length > 0)
+      {
+        foreach (var payload in payloads)
+        {
+          var anchors = WayspotAnchorService.RestoreWayspotAnchors(payload);
+          if (anchors.Length == 0)
+            return; // error raised in CreateWayspotAnchors
+
+          CreateWayspotAnchorGameObject(anchors[0], Vector3.zero, Quaternion.identity, false);
+        }
+
+        _statusLog.text = $"Loaded {_wayspotAnchorTrackers.Count} anchors.";
+      }
+      else
+      {
+        _statusLog.text = "No anchors to load.";
+      }
+    }
+
+    public void LoadSpecificAnchor()
+    {
+      var payloads = WayspotAnchorDataUtility.LoadLocalSpecificPayload(_WayspotAnchorPayload);
       if (payloads.Length > 0)
       {
         foreach (var payload in payloads)
