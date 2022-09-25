@@ -218,7 +218,8 @@ public class GameState : MonoBehaviour
 
             //find the distance from the current position on the track and look at the distance from the last position on the track.
             //when the distance from the finish line is nearly 0, then we "finish" the race.
-            if (_raceTrack.DistanceLeft() <= 0)
+            float distLeft = _raceTrack.DistanceLeft();
+            if (distLeft <= 0)
             {
                 _gameMode = GameMode.RaceFinished;
             }

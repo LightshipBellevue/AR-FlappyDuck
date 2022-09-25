@@ -78,7 +78,7 @@ public class Racetrack : MonoBehaviour
 
         PointList.Clear();
 
-        for(int a=0; a<500; a++)
+        for(int a=0; a<10; a++)
         {
             PointList.Add(new Vector3(a*3, 0, 0));
         }
@@ -97,7 +97,7 @@ public class Racetrack : MonoBehaviour
         while(curDist < duckTravelledDistance)
         {
             //early out since we exceeded the number of elements in the point list
-            if (index + 1 > PointList.Count) return ret;
+            if (index + 1 >= PointList.Count) return ret;
 
             Vector3 cur = PointList[index];
             Vector3 next = PointList[index + 1];
