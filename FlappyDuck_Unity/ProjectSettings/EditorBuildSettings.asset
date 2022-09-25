@@ -9,9 +9,6 @@ EditorBuildSettings:
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
-    path: Assets/ARDKExamples/ContextAwareness/Segmentation/SemanticSegmentation.unity
-    guid: b31f157add5014c85962f656eefdf04d
-  - enabled: 0
-    path: Assets/ARDKExamples/ContextAwareness/Depth/Depth.unity
-    guid: e5811d6a38e5846ca8d1a720194f0a1b
+    path: Assets/EricTest.unity
+    guid: f02e71f2939264b45ac9c67c15ef18a6
   m_configObjects: {}

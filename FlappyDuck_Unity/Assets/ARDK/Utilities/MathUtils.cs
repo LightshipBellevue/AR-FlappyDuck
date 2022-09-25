@@ -559,9 +559,10 @@ namespace Niantic.ARDK.Utilities
             ? ScreenOrientation.LandscapeLeft
             : ScreenOrientation.Portrait;
   #else
-        return _MockCameraConfiguration.CorrectedScreenWidth > _MockCameraConfiguration.CorrectedScreenHeight
-          ? ScreenOrientation.LandscapeLeft
-          : ScreenOrientation.Portrait;
+        //return _MockCameraConfiguration.CorrectedScreenWidth > _MockCameraConfiguration.CorrectedScreenHeight
+        //  ? ScreenOrientation.LandscapeLeft
+        //  : ScreenOrientation.Portrait;
+        return ScreenOrientation.Portrait;
   #endif
 #else
       return Screen.orientation;

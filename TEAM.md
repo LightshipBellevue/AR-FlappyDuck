@@ -4,6 +4,6 @@ please add yourself...
 |--- | --- | ---|
 |Ryan Gadz | Tech Artist | quack  |
 |Todd Little | Dev / UX Design | quack|
-|--- | --- | ---|
+|Rajeev Dujari | Dev | quack|
 |--- | --- | ---|
 |--- | --- | ---|
