@@ -745,7 +745,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52451fd4749e945a0be9a6e3c50abb9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _anchorPrefab: {fileID: 1321982507108314, guid: 6484d8fda33c04b9488646671e593855,
+  _anchorPrefab: {fileID: 3000298357042374876, guid: bdda0e28fb26a4919bd0e1cea507b88d,
     type: 3}
   _pathingRouting: {fileID: 0}
   _camera: {fileID: 1314260587}
